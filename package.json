@@ -1,0 +1,53 @@
+{
+  "name": "lastgen",
+  "version": "0.1.0",
+  "description": "Check if you started coding before or after AI agents",
+  "type": "module",
+  "bin": {
+    "lastgen": "./src/index.ts"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "test": "node --test src/**/*.test.ts",
+    "start": "node src/index.ts"
+  },
+  "keywords": [
+    "developer",
+    "credential",
+    "github",
+    "proof",
+    "ai",
+    "coder",
+    "cli"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pgagnidze/lastgen"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@types/node": "^25.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.0",
+    "@typescript-eslint/parser": "^8.56.0",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1",
+    "semantic-release": "^25.0.3",
+    "typescript": "^5.8.0"
+  }
+}
