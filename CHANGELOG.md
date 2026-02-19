@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/pgagnidze/lastgen/compare/v1.1.1...v1.2.0) (2026-02-19)
+
+
+### Features
+
+* **web:** show cutoff date and context in header ([fbb4ae0](https://github.com/pgagnidze/lastgen/commit/fbb4ae0918f1f6d5a70894238a5ed9c9bc0c783c))
+
 ## [1.1.1](https://github.com/pgagnidze/lastgen/compare/v1.1.0...v1.1.1) (2026-02-19)
 
 
