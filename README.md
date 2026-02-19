@@ -4,9 +4,11 @@
 
 Check if you started coding before or after AI agents.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Node](https://img.shields.io/badge/node-%E2%89%A522.18.0-green)](https://nodejs.org)
-[![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)]()
+![License:MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)
+[![npm downloads](https://img.shields.io/npm/dm/lastgen.svg)](https://www.npmjs.com/package/lastgen)
+[![npm version](https://img.shields.io/npm/v/lastgen?style=flat-square)](https://www.npmjs.com/package/lastgen)
+[![Install size](https://packagephobia.com/badge?p=lastgen)](https://packagephobia.com/result?p=lastgen)
+[![Dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen)](https://www.npmjs.com/package/lastgen)
 
 </div>
 
