@@ -57,6 +57,12 @@ h1 {
   margin-top: 0.25rem;
 }
 
+.cutoff {
+  color: var(--dim);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
 /* Terminal input */
 
 .terminal-input {
