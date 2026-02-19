@@ -6,7 +6,7 @@ import type { GitHubUser, FirstCommit, CommitDetail } from './types.ts';
 import { CUTOFF_DATE } from './types.ts';
 
 const GITHUB_API = 'https://api.github.com';
-const USER_AGENT = 'lastgen-cli';
+const USER_AGENT = 'lastgen';
 
 function buildHeaders(token?: string): Record<string, string> {
   const headers: Record<string, string> = {
@@ -33,10 +33,7 @@ async function githubFetch(
       const resetDate = resetTimestamp
         ? new Date(Number(resetTimestamp) * 1000).toLocaleTimeString()
         : 'soon';
-      throw new Error(
-        `GitHub API rate limit exceeded. Resets at ${resetDate}.\n` +
-          'Tip: set GITHUB_TOKEN or use --token for 5,000 requests/hour.',
-      );
+      throw new Error(`GitHub API rate limit exceeded. Resets at ${resetDate}.`);
     }
   }
 

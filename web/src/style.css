@@ -1,0 +1,270 @@
+/* lastgen web — dark terminal theme */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --fg: #e0e0e0;
+  --dim: #666;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --red: #ef4444;
+  --border: #333;
+  --surface: #111;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+/* Header */
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.subtitle {
+  color: var(--dim);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Terminal input */
+
+.terminal-input {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.15s;
+}
+
+.terminal-input:focus-within {
+  border-color: var(--blue);
+}
+
+.prompt {
+  color: var(--green);
+  font-weight: 700;
+  user-select: none;
+  flex-shrink: 0;
+  margin-right: 0.5rem;
+}
+
+.terminal-input input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: var(--green);
+}
+
+.terminal-input input::placeholder {
+  color: var(--dim);
+}
+
+.terminal-input input.loading {
+  opacity: 0.5;
+}
+
+.lookup-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  font-family: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.lookup-btn:hover {
+  color: var(--fg);
+}
+
+/* Status */
+
+.status {
+  text-align: center;
+  color: var(--dim);
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+.status.error {
+  color: var(--red);
+}
+
+/* Certificate */
+
+#certificate-output {
+  margin-top: 2rem;
+}
+
+pre.certificate,
+pre.verification {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  padding: 0;
+  margin: 0 auto;
+  width: fit-content;
+  background: transparent;
+  color: var(--fg);
+}
+
+pre.certificate .dim,
+pre.verification .dim {
+  color: var(--dim);
+}
+
+pre.certificate .bold,
+pre.verification .bold {
+  font-weight: 700;
+}
+
+pre.certificate .era-lastgen,
+.era-lastgen {
+  color: var(--blue);
+}
+
+pre.certificate .era-ainative,
+.era-ainative {
+  color: var(--green);
+}
+
+pre.verification .pass {
+  color: var(--green);
+  font-weight: 700;
+}
+
+pre.verification .fail {
+  color: var(--red);
+  font-weight: 700;
+}
+
+/* Share buttons */
+
+#share-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+#share-buttons button {
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-family: inherit;
+  font-size: 0.75rem;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+#share-buttons button:hover {
+  color: var(--fg);
+}
+
+.share-sep {
+  color: var(--border);
+  font-size: 0.75rem;
+}
+
+/* Verify section */
+
+#verify-section {
+  margin-top: 3rem;
+}
+
+.drop-zone {
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 1.25rem;
+  text-align: center;
+  color: var(--dim);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+  border-color: var(--blue);
+  color: var(--fg);
+}
+
+.drop-zone-link {
+  color: var(--blue);
+}
+
+.drop-zone input[type='file'] {
+  display: none;
+}
+
+#verify-output {
+  margin-top: 1rem;
+}
+
+/* Footer */
+
+footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: var(--dim);
+  font-size: 0.75rem;
+}
+
+footer a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+footer code {
+  color: var(--dim);
+  font-family: inherit;
+}

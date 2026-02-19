@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lastgen — Are you Last Gen or AI Native?</title>
+    <meta name="description" content="Check if you started coding before or after AI agents. Enter a GitHub username to find out." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>lastgen</h1>
+        <p class="subtitle">Check if you started coding before or after AI agents.</p>
+      </header>
+
+      <main>
+        <form id="lookup-form" autocomplete="off">
+          <div class="terminal-input">
+            <span class="prompt">@ </span>
+            <input
+              id="username-input"
+              type="text"
+              placeholder="enter github username"
+              spellcheck="false"
+              autocomplete="off"
+            />
+            <button type="submit" class="lookup-btn" aria-label="Look up">→</button>
+          </div>
+        </form>
+
+        <div id="status" class="status" hidden></div>
+        <div id="certificate-output" hidden></div>
+        <div id="share-buttons" hidden>
+          <button id="copy-link" type="button">copy link</button>
+          <span class="share-sep">·</span>
+          <button id="copy-badge" type="button">copy badge</button>
+          <span class="share-sep">·</span>
+          <button id="download-json" type="button">download json</button>
+        </div>
+
+        <div id="verify-section">
+          <div id="drop-zone" class="drop-zone">
+            <p>Drop a certificate JSON here to verify, or <span class="drop-zone-link">browse</span></p>
+            <input id="file-input" type="file" accept=".json" />
+          </div>
+          <div id="verify-output" hidden></div>
+        </div>
+      </main>
+
+      <footer>
+        <p>
+          <a href="https://github.com/pgagnidze/lastgen" target="_blank" rel="noopener">GitHub</a>
+          · <code>npx lastgen &lt;username&gt;</code>
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

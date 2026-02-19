@@ -1,16 +1,14 @@
 /**
- * @fileoverview Certificate verification - re-checks saved proofs against GitHub API.
+ * @fileoverview Certificate verification logic. Platform-agnostic: no I/O, no display.
+ * Accepts parsed data and a HashFn, returns structured results.
  */
 
-import { readFileSync } from 'node:fs';
-
-import type { Certificate, VerifyResult } from './types.ts';
+import type { Certificate, HashFn, VerifyResult } from './types.ts';
 import { CUTOFF_DATE, THIRTY_DAYS_MS } from './types.ts';
 import { fetchCommit } from './github.ts';
 import { generateCertificateHash, resolveProofDate } from './proof.ts';
-import { BOX_WIDTH, boxLine, boxRule, error, info, style } from './display.ts';
 
-function isValidCertificate(data: unknown): data is Certificate {
+export function isValidCertificate(data: unknown): data is Certificate {
   if (typeof data !== 'object' || data === null) {
     return false;
   }
@@ -36,35 +34,22 @@ function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-export async function verifyCertificate(filePath: string, token?: string): Promise<boolean> {
-  let raw: string;
-  try {
-    raw = readFileSync(filePath, 'utf-8');
-  } catch {
-    error(`Cannot read file: ${filePath}`);
-    return false;
-  }
+export interface VerifyCertificateResult {
+  valid: boolean;
+  results: VerifyResult[];
+  certificateNumber: string;
+  username: string;
+}
 
-  let cert: unknown;
-  try {
-    cert = JSON.parse(raw);
-  } catch {
-    error('Invalid JSON in certificate file.');
-    return false;
-  }
-
-  if (!isValidCertificate(cert)) {
-    error('File is not a valid lastgen certificate.');
-    return false;
-  }
-
-  info(`Verifying certificate ${cert.certificateNumber}...`);
-  info(`Developer: ${cert.identity.username}`);
-  info('');
-
+export async function verifyCertificateData(
+  cert: Certificate,
+  hashFn: HashFn,
+  token?: string,
+): Promise<VerifyCertificateResult> {
   const results: VerifyResult[] = [];
 
-  const expectedHash = generateCertificateHash(
+  const expectedHash = await generateCertificateHash(
+    hashFn,
     cert.identity.username,
     cert.identity.githubId,
     cert.proof.proofDate,
@@ -116,7 +101,6 @@ export async function verifyCertificate(filePath: string, token?: string): Promi
 
   if (cert.proof.firstCommit.sha) {
     try {
-      info(`Fetching commit ${cert.proof.firstCommit.sha.slice(0, 7)} from GitHub...`);
       const commitDetail = await fetchCommit(
         cert.proof.firstCommit.repo,
         cert.proof.firstCommit.sha,
@@ -132,15 +116,9 @@ export async function verifyCertificate(filePath: string, token?: string): Promi
 
       const identityMatch = authorMatch || committerMatch || emailMatch;
       const matchMethods: string[] = [];
-      if (authorMatch) {
-        matchMethods.push('author login');
-      }
-      if (committerMatch) {
-        matchMethods.push('committer login');
-      }
-      if (emailMatch) {
-        matchMethods.push('noreply email');
-      }
+      if (authorMatch) matchMethods.push('author login');
+      if (committerMatch) matchMethods.push('committer login');
+      if (emailMatch) matchMethods.push('noreply email');
 
       results.push({
         check: 'Identity',
@@ -186,9 +164,8 @@ export async function verifyCertificate(filePath: string, token?: string): Promi
         const authorTime = new Date(commitDetail.authorDate).getTime();
         const committerTime = new Date(commitDetail.committerDate).getTime();
         const driftMs = Math.abs(committerTime - authorTime);
-        const thirtyDaysMs = THIRTY_DAYS_MS;
         const driftDays = Math.round(driftMs / (24 * 60 * 60 * 1000));
-        const consistent = driftMs <= thirtyDaysMs;
+        const consistent = driftMs <= THIRTY_DAYS_MS;
         results.push({
           check: 'Date consistency',
           passed: consistent,
@@ -225,50 +202,12 @@ export async function verifyCertificate(filePath: string, token?: string): Promi
     }
   }
 
-  const out = process.stdout;
-  const lines: string[] = [];
+  const allPassed = results.every((r) => r.passed);
 
-  lines.push(boxRule());
-
-  const title = style('bold', 'VERIFICATION');
-  const titleRaw = 'VERIFICATION';
-  const titlePadL = Math.floor((BOX_WIDTH - titleRaw.length) / 2);
-  const titlePadR = BOX_WIDTH - titleRaw.length - titlePadL;
-  lines.push(boxLine(' '.repeat(titlePadL) + title + ' '.repeat(titlePadR), BOX_WIDTH));
-
-  lines.push(boxRule());
-
-  let allPassed = true;
-  for (const result of results) {
-    const icon = result.passed ? style('green', 'PASS') : style('red', 'FAIL');
-    const checkLine = `${icon}  ${style('bold', result.check)}`;
-    lines.push(boxLine(checkLine, 4 + 2 + result.check.length));
-    const indent = 6;
-    const maxLen = BOX_WIDTH - indent;
-    let remaining = result.detail;
-    while (remaining.length > 0) {
-      const chunk = remaining.slice(0, maxLen);
-      remaining = remaining.slice(maxLen);
-      const line = ' '.repeat(indent) + style('dim', chunk);
-      lines.push(boxLine(line, indent + chunk.length));
-    }
-    if (!result.passed) {
-      allPassed = false;
-    }
-  }
-
-  lines.push(boxRule());
-
-  if (allPassed) {
-    const msg = style('green', 'Certificate is valid.');
-    lines.push(boxLine(msg, 21));
-  } else {
-    const msg = style('red', 'Certificate verification failed.');
-    lines.push(boxLine(msg, 32));
-  }
-
-  lines.push(boxRule());
-
-  out.write('\n' + lines.join('\n') + '\n\n');
-  return allPassed;
+  return {
+    valid: allPassed,
+    results,
+    certificateNumber: cert.certificateNumber,
+    username: cert.identity.username,
+  };
 }

@@ -1,10 +1,9 @@
 /**
  * @fileoverview Era classification, hashing, and certificate generation.
+ * Platform-agnostic: hash function is injected via HashFn.
  */
 
-import { createHash } from 'node:crypto';
-
-import type { Certificate, EraKey, FirstCommit, GitHubUser } from './types.ts';
+import type { Certificate, EraKey, FirstCommit, GitHubUser, HashFn } from './types.ts';
 
 import { CERTIFICATE_SALT, CERTIFICATE_VERSION, CUTOFF_DATE, THIRTY_DAYS_MS } from './types.ts';
 
@@ -48,12 +47,13 @@ function getEffectiveCommitDate(commit: FirstCommit): string {
   return commit.date;
 }
 
-export function generateCertificateHash(
+export async function generateCertificateHash(
+  hashFn: HashFn,
   username: string,
   githubId: number,
   proofDate: string,
   era: EraKey,
-): string {
+): Promise<string> {
   const payload = JSON.stringify({
     username,
     githubId,
@@ -62,7 +62,7 @@ export function generateCertificateHash(
     salt: CERTIFICATE_SALT,
   });
 
-  return createHash('sha256').update(payload).digest('hex');
+  return hashFn(payload);
 }
 
 export function generateCertificateNumber(hash: string): string {
@@ -72,10 +72,14 @@ export function generateCertificateNumber(hash: string): string {
   return `LGC-${prefix}-${padded}`;
 }
 
-export function createCertificate(user: GitHubUser, firstCommit: FirstCommit | null): Certificate {
+export async function createCertificate(
+  hashFn: HashFn,
+  user: GitHubUser,
+  firstCommit: FirstCommit | null,
+): Promise<Certificate> {
   const proofDate = resolveProofDate(user, firstCommit);
   const era = classifyEra(proofDate);
-  const hash = generateCertificateHash(user.login, user.id, proofDate, era);
+  const hash = await generateCertificateHash(hashFn, user.login, user.id, proofDate, era);
   const certificateNumber = generateCertificateNumber(hash);
 
   return {

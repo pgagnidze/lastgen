@@ -14,6 +14,8 @@ Check if you started coding before or after AI agents.
 
 Claude Code shipped publicly on **February 21, 2025**. If your earliest verifiable commit is before that date, you get classified as **Last Gen**. If it's after, **AI Native**.
 
+**[Try it in your browser →](https://pgagnidze.github.io/lastgen/)**
+
 > [!IMPORTANT]
 > This is a novelty tool for fun. It is not a measure of skill or credibility.
 
@@ -50,6 +52,9 @@ npx lastgen --badge torvalds
 
 # JSON output
 npx lastgen --json torvalds
+
+# Launch web UI locally
+npx lastgen serve
 ```
 
 ### Options
@@ -58,6 +63,7 @@ npx lastgen --json torvalds
 --token <token>       GitHub personal access token
 --json                Output as JSON
 --badge               Output as README badge markdown
+--port <port>         Port for web UI (default: 3000)
 --no-color            Disable colors
 -h, --help            Show help
 -v, --version         Show version

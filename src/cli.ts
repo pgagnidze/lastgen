@@ -7,10 +7,12 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { fetchFirstCommit, fetchUser } from './github.ts';
-import { createCertificate } from './proof.ts';
+import { fetchFirstCommit, fetchUser } from './core/github.ts';
+import { createCertificate } from './core/proof.ts';
+import { nodeHash } from './hash.ts';
 import { displayBadgeMarkdown, displayCertificate, displayJson, error, info } from './display.ts';
-import { verifyCertificate } from './verify.ts';
+import { verifyCertificate } from './verify-cli.ts';
+import { serve } from './serve.ts';
 
 function getVersion(): string {
   try {
@@ -36,11 +38,13 @@ const HELP_BRIEF = `
   Usage:
     lastgen <username>                Classify a GitHub user
     lastgen verify <file.json>        Verify a saved certificate
+    lastgen serve [--port <port>]     Launch web UI
 
   Options:
     --token <token>       GitHub personal access token
     --json                Output as JSON
     --badge               Output as README badge markdown
+    --port <port>         Port for web UI (default: 3000)
     --no-color            Disable colors
     -h, --help            Show this help
     -v, --version         Show version
@@ -54,12 +58,14 @@ const HELP_BRIEF = `
     npx lastgen --json torvalds > proof.json
     npx lastgen verify proof.json
     npx lastgen --badge torvalds
+    npx lastgen serve
 `;
 
 interface CliOptions {
   command: string;
   target: string;
   token?: string;
+  port: number;
   json: boolean;
   badge: boolean;
   help: boolean;
@@ -73,6 +79,7 @@ export function parseCli(argv: string[]): CliOptions {
       token: { type: 'string' },
       json: { type: 'boolean', default: false },
       badge: { type: 'boolean', default: false },
+      port: { type: 'string' },
       help: { type: 'boolean', short: 'h', default: false },
       version: { type: 'boolean', short: 'v', default: false },
       'no-color': { type: 'boolean', default: false },
@@ -83,11 +90,13 @@ export function parseCli(argv: string[]): CliOptions {
 
   const first = positionals[0] ?? '';
   const isVerify = first === 'verify';
+  const isServe = first === 'serve';
 
   return {
-    command: isVerify ? 'verify' : first ? 'lookup' : '',
+    command: isVerify ? 'verify' : isServe ? 'serve' : first ? 'lookup' : '',
     target: isVerify ? (positionals[1] ?? '') : first,
     token: (values.token as string | undefined) ?? process.env['GITHUB_TOKEN'],
+    port: Number(values.port) || 3000,
     json: Boolean(values.json),
     badge: Boolean(values.badge),
     help: Boolean(values.help),
@@ -117,6 +126,10 @@ export async function run(argv: string[]): Promise<void> {
       await handleVerify(opts);
       break;
     }
+    case 'serve': {
+      serve(opts.port);
+      break;
+    }
     default: {
       error(`Unknown command: ${opts.command}`);
       process.stdout.write(HELP_BRIEF);
@@ -141,7 +154,7 @@ async function handleLookup(opts: CliOptions): Promise<void> {
     fetchFirstCommit(opts.target, opts.token),
   ]);
 
-  const cert = createCertificate(user, firstCommit);
+  const cert = await createCertificate(nodeHash, user, firstCommit);
 
   if (opts.badge) {
     displayBadgeMarkdown(cert);
@@ -159,7 +172,7 @@ async function handleVerify(opts: CliOptions): Promise<void> {
     return;
   }
 
-  const valid = await verifyCertificate(opts.target, opts.token);
+  const valid = await verifyCertificate(opts.target, nodeHash, opts.token);
   if (!valid) {
     process.exitCode = 1;
   }

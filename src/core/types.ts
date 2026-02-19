@@ -84,3 +84,6 @@ export interface VerifyResult {
   passed: boolean;
   detail: string;
 }
+
+/** Platform-agnostic SHA-256 hash function. */
+export type HashFn = (data: string) => Promise<string>;

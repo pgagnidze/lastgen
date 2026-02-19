@@ -4,8 +4,8 @@
 
 import { styleText } from 'node:util';
 
-import type { Certificate } from './types.ts';
-import { ERAS } from './types.ts';
+import type { Certificate } from './core/types.ts';
+import { ERAS } from './core/types.ts';
 
 function shouldUseColor(): boolean {
   if (process.env['NO_COLOR'] !== undefined) {
