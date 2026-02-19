@@ -19,6 +19,7 @@ export type EraKey = keyof typeof ERAS;
 
 export const CERTIFICATE_VERSION = '1.0';
 export const CERTIFICATE_SALT = 'lastgen_v1';
+export const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 export interface GitHubUser {
   login: string;

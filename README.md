@@ -122,11 +122,14 @@ Checks include:
 | ---------------------- | --------------------------------------------------------- |
 | **Hash integrity**     | Recomputes SHA-256 hash to detect tampering               |
 | **Era classification** | Confirms era matches the proof date                       |
+| **Proof date**         | Re-derives proof date from commit and account data        |
 | **Identity**           | 3-way match: author login, committer login, noreply email |
 | **Repo ownership**     | Reports whether commit is in a self-owned or third-party repo |
 | **GitHub ID**          | Matches commit author ID against certificate              |
 | **Commit date**        | Fetches the commit from GitHub and compares dates         |
 | **Date consistency**   | Detects forged author dates via author/committer drift    |
+| **Root commit**        | Notes if commit has no parents (higher trust)             |
+| **GPG signature**      | Notes if commit is cryptographically signed               |
 
 ## License
 

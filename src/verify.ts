@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 
 import type { Certificate, VerifyResult } from './types.ts';
-import { CUTOFF_DATE } from './types.ts';
+import { CUTOFF_DATE, THIRTY_DAYS_MS } from './types.ts';
 import { fetchCommit } from './github.ts';
 import { generateCertificateHash, resolveProofDate } from './proof.ts';
 import { BOX_WIDTH, boxLine, boxRule, error, info, style } from './display.ts';
@@ -186,7 +186,7 @@ export async function verifyCertificate(filePath: string, token?: string): Promi
         const authorTime = new Date(commitDetail.authorDate).getTime();
         const committerTime = new Date(commitDetail.committerDate).getTime();
         const driftMs = Math.abs(committerTime - authorTime);
-        const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+        const thirtyDaysMs = THIRTY_DAYS_MS;
         const driftDays = Math.round(driftMs / (24 * 60 * 60 * 1000));
         const consistent = driftMs <= thirtyDaysMs;
         results.push({

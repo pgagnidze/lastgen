@@ -6,15 +6,13 @@ import { createHash } from 'node:crypto';
 
 import type { Certificate, EraKey, FirstCommit, GitHubUser } from './types.ts';
 
-import { CERTIFICATE_SALT, CERTIFICATE_VERSION, CUTOFF_DATE } from './types.ts';
+import { CERTIFICATE_SALT, CERTIFICATE_VERSION, CUTOFF_DATE, THIRTY_DAYS_MS } from './types.ts';
 
 export function classifyEra(proofDate: string): EraKey {
   const cutoff = new Date(CUTOFF_DATE).getTime();
   const date = new Date(proofDate).getTime();
   return date < cutoff ? 'LAST_GEN' : 'AI_NATIVE';
 }
-
-const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 export function resolveProofDate(user: GitHubUser, firstCommit: FirstCommit | null): string {
   if (!firstCommit) {
