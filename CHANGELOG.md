@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/pgagnidze/lastgen/compare/v1.0.2...v1.1.0) (2026-02-19)
+
+
+### Features
+
+* add web frontend, serve command, and shared core modules ([da1c076](https://github.com/pgagnidze/lastgen/commit/da1c07688231fe4b1f2a6aee76abfa301aadcb1b))
+
 ## [1.0.2](https://github.com/pgagnidze/lastgen/compare/v1.0.1...v1.0.2) (2026-02-19)
 
 
