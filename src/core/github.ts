@@ -120,7 +120,8 @@ async function searchFirstCommitByQuery(
       message: ((commit.message as string) ?? '').split('\n')[0] ?? '',
       committerDate: (commitCommitter?.date as string | undefined) ?? undefined,
     };
-  } catch {
+  } catch (err) {
+    if (err instanceof Error && err.message.includes('rate limit')) throw err;
     return null;
   }
 }
