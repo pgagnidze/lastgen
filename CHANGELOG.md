@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/pgagnidze/lastgen/compare/v1.1.0...v1.1.1) (2026-02-19)
+
+
+### Bug Fixes
+
+* propagate rate limit errors instead of returning wrong results ([6e4c15d](https://github.com/pgagnidze/lastgen/commit/6e4c15dd3360da79c76cdac67f5cb57c8baf43ba))
+
 # [1.1.0](https://github.com/pgagnidze/lastgen/compare/v1.0.2...v1.1.0) (2026-02-19)
 
 
