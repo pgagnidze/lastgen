@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/pgagnidze/lastgen/compare/v1.0.0...v1.0.1) (2026-02-19)
+
+
+### Bug Fixes
+
+* enable npm provenance attestations ([4b07e2d](https://github.com/pgagnidze/lastgen/commit/4b07e2d8f10165fc07b849566ffa4ef0d67dd2c1))
+
 # 1.0.0 (2026-02-19)
 
 
