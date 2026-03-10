@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/pgagnidze/lastgen/compare/v1.2.0...v1.2.1) (2026-03-10)
+
+
+### Bug Fixes
+
+* use tsdown to compile cli and ship dist instead of raw typescript ([4c1956a](https://github.com/pgagnidze/lastgen/commit/4c1956a191100bb7169297b080c0e3b2d22479a2))
+
 # [1.2.0](https://github.com/pgagnidze/lastgen/compare/v1.1.1...v1.2.0) (2026-02-19)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "lastgen",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Check if you started coding before or after AI agents",
   "type": "module",
   "bin": {
