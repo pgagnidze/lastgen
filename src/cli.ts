@@ -3,9 +3,7 @@
  */
 
 import { parseArgs } from 'node:util';
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 import { fetchFirstCommit, fetchUser } from './core/github.ts';
 import { createCertificate } from './core/proof.ts';
@@ -14,17 +12,19 @@ import { displayBadgeMarkdown, displayCertificate, displayJson, error, info } fr
 import { verifyCertificate } from './verify-cli.ts';
 import { serve } from './serve.ts';
 
-function getVersion(): string {
-  try {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
-    const packagePath = join(__dirname, '..', 'package.json');
-    const pkg = JSON.parse(readFileSync(packagePath, 'utf-8'));
-    return pkg.version ?? 'unknown';
-  } catch {
-    return 'unknown';
-  }
+const require = createRequire(import.meta.url);
+const pkg = require('../package.json') as { version: string };
+
+const buildInfo: string[] = [];
+if (process.env.GITHUB_SHA) {
+  buildInfo.push(`commit: ${process.env.GITHUB_SHA.substring(0, 7)}`);
 }
+if (process.env.BUILD_DATE) {
+  buildInfo.push(`built: ${process.env.BUILD_DATE}`);
+}
+const buildString = buildInfo.length > 0 ? ` (${buildInfo.join(', ')})` : '';
+
+const VERSION = `lastgen ${pkg.version}${buildString}`;
 
 const HELP_BRIEF = `
     _            _
@@ -108,7 +108,7 @@ export async function run(argv: string[]): Promise<void> {
   const opts = parseCli(argv);
 
   if (opts.version) {
-    process.stdout.write(`lastgen ${getVersion()}\n`);
+    process.stdout.write(VERSION + '\n');
     return;
   }
 

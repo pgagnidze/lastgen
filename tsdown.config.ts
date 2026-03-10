@@ -10,4 +10,8 @@ export default defineConfig({
   deps: {
     skipNodeModulesBundle: true,
   },
+  env: {
+    GITHUB_SHA: process.env.GITHUB_SHA || '',
+    BUILD_DATE: process.env.BUILD_DATE || '',
+  },
 });
