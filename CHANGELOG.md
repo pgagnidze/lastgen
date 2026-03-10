@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/pgagnidze/lastgen/compare/v1.2.1...v1.3.0) (2026-03-10)
+
+
+### Features
+
+* add build metadata to version output ([389e4cd](https://github.com/pgagnidze/lastgen/commit/389e4cd7746c6add8cd1a5fae255a7875a3a036d))
+
 ## [1.2.1](https://github.com/pgagnidze/lastgen/compare/v1.2.0...v1.2.1) (2026-03-10)
 
 
